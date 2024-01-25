@@ -13,14 +13,11 @@ def file_not_found(filename):
 
 def get_file_name():
     while True:
-        try:
-            filename = input('拖动输入文件到窗口内，直接输入回车则使用默认文件input.xlsx') or 'input.xlsx'
-            filename = filename.strip('"')
-            if os.path.exists(filename):
-                return filename
-            else:
-                file_not_found(filename)
-        except FileNotFoundError:
+        filename = input('拖动输入文件到窗口内，直接输入回车则使用默认文件input.xlsx') or 'input.xlsx'
+        filename = filename.strip('"')
+        if os.path.exists(filename):
+            return filename
+        else:
             file_not_found(filename)
 
 def import_file(filename):
