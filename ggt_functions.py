@@ -3,13 +3,16 @@ from pandas import read_excel
 import os
 from collections import defaultdict
 
+
 def file_not_found(filename):
     if filename == 'input.xlsx':
         print('未找到文件\'input.xlsx\'，请确保exe文件和表格文件处于同一目录下')
     else:
         print(f'未找到文件\'{filename}\'')
     key = input('按回车重启程序')
-    if key == 'q': exit()
+    if key == 'q':
+        exit()
+
 
 def get_file_name():
     while True:
@@ -20,18 +23,19 @@ def get_file_name():
         else:
             file_not_found(filename)
 
+
 def import_file(filename):
     table_data = read_excel(filename, header=None)
-    
+
     # 校验table数据第一列
     invalid_rows = table_data[table_data.iloc[:, 0].isnull()].index
     if len(invalid_rows) > 0:
         print('\033[33m')
-        print('警告: 输入文件中第{}行为无效行，删除后程序继续运行。'.format(list(invalid_rows+1)))
+        print('警告: 输入文件中第{}行为无效行，删除后程序继续运行。'.format(list(invalid_rows + 1)))
         table_data = table_data.drop(invalid_rows).reset_index(drop=True)
         print('      若结果有误，请再次检查输入文件并使第一列没有空的单元格。')
         print('\033[0m')
-    
+
     # 试导入简称表
     try:
         symbol_data = read_excel(filename, header=None, sheet_name='symbol')
@@ -43,8 +47,9 @@ def import_file(filename):
     except:
         print('未找到子表\'symbol\'用于替换简称，程序继续运行')
         return table_data
-    
+
     return table_data
+
 
 def import_paidfile(filename):
     paid_dict = {}
@@ -65,6 +70,7 @@ def import_paidfile(filename):
         print('未找到退补表，程序继续运行')
     return paid_dict
 
+
 def validate(lst):
     counts = defaultdict(int)
     result = []
@@ -75,4 +81,3 @@ def validate(lst):
         else:
             result.append(item)
     return result
-
